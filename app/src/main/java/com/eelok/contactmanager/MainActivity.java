@@ -4,50 +4,60 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import com.eelok.contactmanager.data.DatabaseHandler;
 import com.eelok.contactmanager.model.Contact;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+
+    private ListView listView;
+    private ArrayList<String> contactArrayList;
+    private ArrayAdapter<String> arrayAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        listView = findViewById(R.id.listView);
+        contactArrayList = new ArrayList<>();
+
         DatabaseHandler db = new DatabaseHandler(MainActivity.this);
-        Contact jeremy = new Contact();
-        jeremy.setName("Jeremy");
-        jeremy.setPhoneNumber("985747374");
+        db.deleteAll();
+        db.addContact(new Contact("James", "91645"));
+        db.addContact(new Contact("Greg", "098765"));
+        db.addContact(new Contact("Helena", "40678765"));
+        db.addContact(new Contact("Carimo", "768345"));
+        db.addContact(new Contact("Greg", "91645"));
 
-        Contact olga = new Contact();
-        olga.setName("Olga");
-        olga.setPhoneNumber("74747747374");
+        db.addContact(new Contact("Silo", "3445"));
+        db.addContact(new Contact("Santos", "6665"));
+        db.addContact(new Contact("Lotios", "5344"));
+        db.addContact(new Contact("Karate", "96534"));
+        db.addContact(new Contact("Guerra", "158285"));
+        db.addContact(new Contact("Gema", "78130"));
 
-//        db.addContact(jeremy);
-//        db.addContact(olga);
-
-//        Contact cont = db.getContact(2);
-//        Log.d("contact:", "" + cont.getName() + " " +  cont.getPhoneNumber());
-
-
-//        cont.setPhoneNumber("555555555");
-//        cont.setName("NewName");
-//        int updatedID = db.updateContact(cont);
-//        Log.d("Updated", " " + updatedID);
-//        Log.d("ID Olga: ", " " + olga.getId() + " "+ olga.getPhoneNumber());
-//        db.deleteContact(olga);
-//        Contact forDelete = db.getContact(3);
-//        Log.d("Get", " " + forDelete.getId() + " " + forDelete.getName());
-//        db.deleteContact(forDelete);
         List<Contact> allContacts = db.getAllContacts();
-        allContacts.forEach(contact ->
-                Log.d("List:", ">>> " + contact.getId() + " " + contact.getName() + " " + contact.getPhoneNumber()));
 
-        int numOfRecords = db.getCount();
-        Log.d("Num of R: ", ">> " + numOfRecords);
+        allContacts.forEach(contact -> {
+                    Log.d("List:", ">>> " + contact.getId() + " " + contact.getName() + " " + contact.getPhoneNumber());
+                    contactArrayList.add(contact.getName());
+                }
+        );
+
+        arrayAdapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_list_item_1,
+                contactArrayList
+        );
+
+        listView.setAdapter(arrayAdapter);
 
     }
+
 }

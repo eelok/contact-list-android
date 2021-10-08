@@ -121,12 +121,19 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.close();
     }
 
-    public int getCount(){
+    public int getCount() {
         SQLiteDatabase db = this.getReadableDatabase();
 
         String countQuery = "SELECT * FROM " + Util.TABLE_NAME;
         Cursor cursor = db.rawQuery(countQuery, null);
 
         return cursor.getCount();
+    }
+
+    public void deleteAll() {
+        SQLiteDatabase db = getWritableDatabase();
+
+        db.delete(Util.TABLE_NAME, null, null);
+//        db.close();
     }
 }
